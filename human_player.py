@@ -139,6 +139,13 @@ def hit():
         result_text.set("Bust...")
         result_label['fg'] = 'blue'
 
+    else:
+
+        # 1ゲームで引けるカードの最大枚数に達してしまった場合は，HITとDOUBLE DOWNは選択できないようにする
+        if len(player_hand.cards) >= MAX_CARDS_PAR_GAME:
+            ht_button['state'] = tk.DISABLED
+            dd_button['state'] = tk.DISABLED
+
 
 # ディーラーに STAND を要求する
 def stand():
