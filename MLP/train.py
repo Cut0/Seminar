@@ -17,9 +17,12 @@ DATA_DIR = './'
 # mushroom_train.csv を用い，食べられるキノコか毒キノコかを分類する場合も試してみましょう．
 TRAIN_DATA_FILE = os.path.join(DATA_DIR, 'mobile_phone_train.csv')
 
-# 学習データセットおよびテストセットのファイル形式
+# 学習データセットおよびテストセットのエンコード形式
 # ここでは UTF-8 を想定する
+# ※ 日本語を含まないCSVファイルを扱うときは FILE_ENCODING = None とするのが良いです．
+# ※ Windows で日本語を含むCSVファイルを扱うときは FILE_ENCODING = 'shift_jis' とすると正常に動作するかもしれません．
 FILE_ENCODING = 'utf_8'
+
 
 # 学習条件の設定（値を変更してみましょう）
 BATCH_SIZE = 64 # バッチサイズ
