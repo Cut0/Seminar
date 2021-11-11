@@ -3,10 +3,6 @@ import csv
 import numpy as np
 
 
-N_TESTS = 500
-TEST_FILE = 'test.csv'
-TRAIN_FILE = 'train.csv'
-
 # CSVファイルのエンコード形式
 # デフォルトでは UTF-8 を想定する
 # ※ 日本語を含まないCSVファイルを扱うときは FILE_ENCODING = None とするのが良いです．
