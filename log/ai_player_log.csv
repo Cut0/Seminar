@@ -1,1 +1,149 @@
 score (before),action,score (after),score (status),n_used_cards, dealer_card_number, player_card_1, player_card_2
+14,HIT,20,unsettled,0,8,13,4
+20,STAND,20,lose,0,8,13,4
+14,HIT,24,bust,6,4,10,4
+14,HIT,24,bust,11,8,12,4
+17,STAND,17,lose,16,10,8,9
+20,STAND,20,win,20,7,11,12
+6,HIT,17,unsettled,24,12,4,2
+17,HIT,14,unsettled,24,12,4,2
+14,HIT,23,bust,24,12,4,2
+14,SURRENDER,14,surrendered,31,1,10,4
+12,HIT,20,unsettled,35,10,2,10
+20,STAND,20,draw,35,10,2,10
+11,DOUBLE DOWN,16,lose,40,11,9,2
+13,HIT,19,unsettled,45,11,1,2
+19,HIT,16,unsettled,45,11,1,2
+16,HIT,22,bust,45,11,1,2
+10,DOUBLE DOWN,20,lose,52,4,3,7
+12,HIT,22,bust,58,13,4,8
+13,HIT,23,bust,63,12,3,12
+12,HIT,14,unsettled,68,10,7,5
+14,SURRENDER,14,surrendered,68,10,7,5
+16,HIT,18,unsettled,73,5,10,6
+18,STAND,18,draw,73,5,10,6
+12,SURRENDER,12,surrendered,79,1,9,3
+12,HIT,20,unsettled,83,12,3,9
+20,STAND,20,lose,83,12,3,9
+20,STAND,20,lose,88,8,13,11
+12,HIT,15,unsettled,93,7,2,12
+15,HIT,24,bust,93,7,2,12
+20,STAND,20,win,99,4,10,13
+14,HIT,18,unsettled,105,8,4,10
+18,STAND,18,lose,105,8,4,10
+12,HIT,21,unsettled,110,8,13,2
+21,STAND,21,win,110,8,13,2
+21,STAND,21,win,116,6,12,1
+12,HIT,15,unsettled,121,11,3,9
+15,SURRENDER,15,surrendered,121,11,3,9
+18,STAND,18,win,126,8,12,8
+11,DOUBLE DOWN,21,win,132,13,3,8
+19,STAND,19,lose,138,7,9,12
+20,STAND,20,lose,143,10,11,12
+20,STAND,20,draw,147,5,10,13
+7,HIT,14,unsettled,152,2,5,2
+14,HIT,24,bust,152,2,5,2
+20,STAND,20,draw,158,11,10,10
+20,STAND,20,win,162,13,12,10
+6,HIT,10,unsettled,166,5,3,3
+10,DOUBLE DOWN,15,win,166,5,3,3
+13,SURRENDER,13,surrendered,173,1,13,3
+17,DOUBLE DOWN,15,win,177,3,1,6
+9,DOUBLE DOWN,13,win,184,4,2,7
+11,DOUBLE DOWN,18,win,191,2,5,6
+10,DOUBLE DOWN,17,win,197,3,8,2
+21,STAND,21,draw,203,1,11,1
+13,HIT,22,bust,207,8,6,7
+16,DOUBLE DOWN,15,lose,212,4,5,1
+14,SURRENDER,14,surrendered,218,10,10,4
+5,HIT,10,unsettled,222,9,3,2
+10,DOUBLE DOWN,20,win,222,9,3,2
+13,HIT,21,unsettled,228,13,3,12
+21,STAND,21,win,228,13,3,12
+15,HIT,20,unsettled,234,4,9,6
+20,STAND,20,win,234,4,9,6
+11,HIT,16,unsettled,240,1,5,6
+16,SURRENDER,16,surrendered,240,1,5,6
+14,HIT,24,bust,245,2,11,4
+13,HIT,21,unsettled,250,12,3,11
+21,STAND,21,win,250,12,3,11
+12,HIT,22,bust,255,2,6,6
+15,HIT,24,bust,260,4,5,12
+14,HIT,15,unsettled,265,3,10,4
+15,HIT,24,bust,265,3,10,4
+8,HIT,15,unsettled,271,4,5,3
+15,HIT,23,bust,271,4,5,3
+12,HIT,15,unsettled,277,2,12,2
+15,HIT,20,unsettled,277,2,12,2
+20,STAND,20,win,277,2,12,2
+20,STAND,20,win,284,8,13,13
+17,HIT,27,bust,288,4,12,7
+13,HIT,15,unsettled,293,10,12,3
+15,SURRENDER,15,surrendered,293,10,12,3
+15,SURRENDER,15,surrendered,298,1,7,8
+16,HIT,20,unsettled,302,6,11,6
+20,STAND,20,lose,302,6,11,6
+20,STAND,20,win,309,11,9,1
+8,HIT,13,unsettled,313,9,2,6
+13,HIT,18,unsettled,313,9,2,6
+18,HIT,22,bust,313,9,2,6
+14,SURRENDER,14,surrendered,320,1,10,4
+13,HIT,17,unsettled,324,5,6,7
+17,HIT,26,bust,324,5,6,7
+7,HIT,17,unsettled,330,3,3,4
+17,HIT,27,bust,330,3,3,4
+9,HIT,17,unsettled,336,7,2,7
+17,HIT,27,bust,336,7,2,7
+7,HIT,13,unsettled,342,6,3,4
+13,HIT,23,bust,342,6,3,4
+18,STAND,18,lose,348,4,8,10
+20,STAND,20,win,354,9,10,12
+17,HIT,27,bust,359,3,11,7
+18,STAND,18,lose,364,1,8,13
+19,STAND,19,lose,369,12,9,13
+13,HIT,23,bust,373,3,3,13
+16,HIT,26,bust,378,6,13,6
+17,HIT,27,bust,383,6,12,7
+11,DOUBLE DOWN,14,win,388,9,2,9
+12,HIT,15,unsettled,395,4,7,5
+15,HIT,25,bust,395,4,7,5
+20,STAND,20,win,401,13,11,13
+14,HIT,20,unsettled,405,4,9,5
+20,STAND,20,win,405,4,9,5
+13,HIT,23,bust,411,11,4,9
+11,DOUBLE DOWN,18,win,416,5,8,3
+9,DOUBLE DOWN,17,lose,423,5,7,2
+9,HIT,16,unsettled,429,7,3,6
+16,HIT,17,unsettled,429,7,3,6
+17,STAND,17,win,429,7,3,6
+14,HIT,20,unsettled,437,7,4,10
+20,STAND,20,win,437,7,4,10
+18,STAND,18,win,444,7,9,9
+17,HIT,15,unsettled,448,2,1,6
+15,STAND,15,lose,448,2,1,6
+14,HIT,22,bust,454,3,4,11
+20,STAND,20,win,459,8,12,10
+8,HIT,18,unsettled,465,8,6,2
+18,STAND,18,draw,465,8,6,2
+14,HIT,24,bust,470,7,4,10
+11,DOUBLE DOWN,13,win,475,13,8,3
+16,SURRENDER,16,surrendered,481,1,9,7
+9,DOUBLE DOWN,19,lose,485,6,7,2
+12,HIT,22,bust,491,11,10,2
+12,HIT,22,bust,496,3,9,3
+13,HIT,18,unsettled,501,11,2,1
+18,HIT,12,unsettled,501,11,2,1
+12,HIT,22,bust,501,11,2,1
+15,HIT,16,unsettled,508,8,4,1
+16,HIT,16,unsettled,508,8,4,1
+16,HIT,18,unsettled,508,8,4,1
+18,HIT,21,unsettled,508,8,4,1
+21,HIT,25,bust,508,8,4,1
+17,HIT,19,unsettled,517,7,9,8
+19,STAND,19,win,517,7,9,8
+7,HIT,10,unsettled,522,5,2,5
+10,DOUBLE DOWN,15,lose,522,5,2,5
+12,HIT,21,unsettled,529,12,1,1
+21,STAND,21,draw,529,12,1,1
+13,HIT,23,bust,535,9,6,7
+19,STAND,19,win,540,6,10,9

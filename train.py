@@ -48,10 +48,10 @@ def read_numerical_data(filename, encoding):
 
         # 入力ベクトルに値を設定する
         vec[0] = float(row[0])
-        vec[3] = float(row[4])
-        vec[4] = float(row[5])
-        vec[5] = float(row[6])
-        vec[6] = float(row[7])
+        vec[1] = float(row[4])
+        vec[2] = float(row[5])
+        vec[3] = float(row[6])
+        vec[4] = float(row[7])
 
         # 出力側のデータ（正解ラベルのデータ）を作成する
         if row[1] == 'HIT':
