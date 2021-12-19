@@ -492,7 +492,7 @@ if __name__ == "__main__":
     for n in range(n_games):
         game_start(n+1)
         while True:
-            if strategy():
+            if model_strategy():
                 break
         print("")
 
