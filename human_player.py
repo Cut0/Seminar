@@ -42,7 +42,8 @@ def game_start():
     # ベット額を現在の所持金から引く
     current_bet = BET
     money -= current_bet
-    money_text.set("money: {0:5}$  ( bet: {1:3}$ )".format(money, current_bet)) # 金額表示を更新
+    money_text.set("money: {0:5}$  ( bet: {1:3}$ )".format(
+        money, current_bet))  # 金額表示を更新
 
     # ディーラーからカード情報を受信
     msg = soc.recv(1024)
@@ -60,19 +61,25 @@ def game_start():
     # 画面表示を更新（配られたカードを表示）
     player_score_text.set("(score: {0})".format(player_hand.get_score()))
     dealer_score_text.set("(score: {0})".format(dealer_hand.get_score()))
-    pc_img = [tk.PhotoImage(file="./imgs/{0}.png".format(pc1+1)), tk.PhotoImage(file="./imgs/{0}.png".format(pc2+1))]
-    dc_img = [tk.PhotoImage(file="./imgs/{0}.png".format(dc+1)), tk.PhotoImage(file="./imgs/ura.png")]
+    pc_img = [tk.PhotoImage(
+        file="./imgs/{0}.png".format(pc1+1)), tk.PhotoImage(file="./imgs/{0}.png".format(pc2+1))]
+    dc_img = [tk.PhotoImage(
+        file="./imgs/{0}.png".format(dc+1)), tk.PhotoImage(file="./imgs/ura.png")]
     empty_img = tk.PhotoImage(file="./imgs/0.png")
     for i in range(0, 2):
         player_canvas[i].photo = pc_img[i]
         dealer_canvas[i].photo = dc_img[i]
-        player_canvas[i].itemconfig(player_canvas_img[i], image=player_canvas[i].photo)
-        dealer_canvas[i].itemconfig(dealer_canvas_img[i], image=dealer_canvas[i].photo)
+        player_canvas[i].itemconfig(
+            player_canvas_img[i], image=player_canvas[i].photo)
+        dealer_canvas[i].itemconfig(
+            dealer_canvas_img[i], image=dealer_canvas[i].photo)
     for i in range(2, MAX_CARDS_PAR_GAME):
         player_canvas[i].photo = empty_img
         dealer_canvas[i].photo = empty_img
-        player_canvas[i].itemconfig(player_canvas_img[i], image=player_canvas[i].photo)
-        dealer_canvas[i].itemconfig(dealer_canvas_img[i], image=dealer_canvas[i].photo)
+        player_canvas[i].itemconfig(
+            player_canvas_img[i], image=player_canvas[i].photo)
+        dealer_canvas[i].itemconfig(
+            dealer_canvas_img[i], image=dealer_canvas[i].photo)
 
     # アクションボタンをアクティブにする
     ht_button['state'] = tk.NORMAL
@@ -109,7 +116,8 @@ def hit():
     pc_img = tk.PhotoImage(file="./imgs/{0}.png".format(pc+1))
     n = len(player_hand.cards) - 1
     player_canvas[n].photo = pc_img
-    player_canvas[n].itemconfig(player_canvas_img[n], image=player_canvas[n].photo)
+    player_canvas[n].itemconfig(
+        player_canvas_img[n], image=player_canvas[n].photo)
     player_score_text.set("(score: {0})".format(player_hand.get_score()))
 
     # 行動前スコア，行動，行動後スコア，行動後ステータスをログに記録しておく
@@ -133,7 +141,8 @@ def hit():
 
         # 金額表示を更新
         current_bet = 0
-        money_text.set("money: {0:5}$  ( bet: {1:3}$ )".format(money, current_bet))
+        money_text.set(
+            "money: {0:5}$  ( bet: {1:3}$ )".format(money, current_bet))
 
         # 勝敗表示を更新
         result_text.set("Bust...")
@@ -169,10 +178,11 @@ def stand():
     # ディーラーのカードを画面に表示
     for i in range(3, len(msg)):
         dc = int(msg[i])
-        dealer_hand.append(dc) # ディーラーの手配を更新
+        dealer_hand.append(dc)  # ディーラーの手配を更新
         dc_img = tk.PhotoImage(file="./imgs/{0}.png".format(dc+1))
         dealer_canvas[i-2].photo = dc_img
-        dealer_canvas[i-2].itemconfig(dealer_canvas_img[i-2], image=dealer_canvas[i-2].photo)
+        dealer_canvas[i-2].itemconfig(dealer_canvas_img[i-2],
+                                      image=dealer_canvas[i-2].photo)
     player_score_text.set("(score: {0})".format(player_hand.get_score()))
     dealer_score_text.set("(score: {0})".format(dealer_hand.get_score()))
 
@@ -222,7 +232,8 @@ def double_down():
     # 今回のみベットを倍にする
     money -= current_bet
     current_bet *= 2
-    money_text.set("money: {0:5}$  ( bet: {1:3}$ )".format(money, current_bet)) # 金額表示を更新
+    money_text.set("money: {0:5}$  ( bet: {1:3}$ )".format(
+        money, current_bet))  # 金額表示を更新
 
     # ディーラーにメッセージを送信
     soc.send(bytes("double_down", 'utf-8'))
@@ -241,11 +252,13 @@ def double_down():
     pc_img = tk.PhotoImage(file="./imgs/{0}.png".format(pc+1))
     n = len(player_hand.cards) - 1
     player_canvas[n].photo = pc_img
-    player_canvas[n].itemconfig(player_canvas_img[n], image=player_canvas[n].photo)
+    player_canvas[n].itemconfig(
+        player_canvas_img[n], image=player_canvas[n].photo)
     player_score_text.set("(score: {0})".format(player_hand.get_score()))
 
     # 行動前スコア，行動，行動後スコア，行動後ステータスをログに記録しておく
-    print('{0},DOUBLE DOWN,{1},{2}'.format(prev_score, score, result), file=logf)
+    print('{0},DOUBLE DOWN,{1},{2}'.format(
+        prev_score, score, result), file=logf)
 
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
@@ -265,7 +278,8 @@ def double_down():
 
         # 金額表示を更新
         current_bet = 0
-        money_text.set("money: {0:5}$  ( bet: {1:3}$ )".format(money, current_bet))
+        money_text.set(
+            "money: {0:5}$  ( bet: {1:3}$ )".format(money, current_bet))
 
         # 勝敗表示を更新
         result_text.set("Bust...")
@@ -277,10 +291,11 @@ def double_down():
         # ディーラーのカードを画面に表示
         for i in range(4, len(msg)):
             dc = int(msg[i])
-            dealer_hand.append(dc) # ディーラーの手配を更新
+            dealer_hand.append(dc)  # ディーラーの手配を更新
             dc_img = tk.PhotoImage(file="./imgs/{0}.png".format(dc+1))
             dealer_canvas[i-3].photo = dc_img
-            dealer_canvas[i-3].itemconfig(dealer_canvas_img[i-3], image=dealer_canvas[i-3].photo)
+            dealer_canvas[i-3].itemconfig(dealer_canvas_img[i-3],
+                                          image=dealer_canvas[i-3].photo)
         dealer_score_text.set("(score: {0})".format(dealer_hand.get_score()))
 
         # 所持金額を更新
@@ -288,7 +303,8 @@ def double_down():
 
         # 金額表示を更新
         current_bet = 0
-        money_text.set("money: {0:5}$  ( bet: {1:3}$ )".format(money, current_bet))
+        money_text.set(
+            "money: {0:5}$  ( bet: {1:3}$ )".format(money, current_bet))
 
         # 勝敗表示を更新
         if result == 'lose':
@@ -363,13 +379,15 @@ root.protocol('WM_DELETE_WINDOW', (lambda: 'pass')())
 # 残額表示オブジェクトの作成と設置
 money_text = tk.StringVar()
 money_text.set("money: {0:5}$".format(money))
-money_label = tk.Label(root, textvariable=money_text, font=('Arial', '12', 'bold'))
+money_label = tk.Label(root, textvariable=money_text,
+                       font=('Arial', '12', 'bold'))
 money_label.place(x=-20+120*MAX_CARDS_PAR_GAME, y=10)
 
 # 勝敗表示オブジェクトの作成と設置
 result_text = tk.StringVar()
 result_text.set("")
-result_label = tk.Label(root, textvariable=result_text, font=('Arial', '24', 'bold'))
+result_label = tk.Label(root, textvariable=result_text,
+                        font=('Arial', '24', 'bold'))
 result_label.place(x=330, y=210)
 
 # スコア表示用オブジェクトの作成と設置
@@ -377,8 +395,10 @@ player_score_text = tk.StringVar()
 dealer_score_text = tk.StringVar()
 player_score_text.set("(score:   )")
 dealer_score_text.set("(score:   )")
-player_score_label = tk.Label(root, textvariable=player_score_text, font=('Arial', '14', 'bold'))
-dealer_score_label = tk.Label(root, textvariable=dealer_score_text, font=('Arial', '14', 'bold'))
+player_score_label = tk.Label(
+    root, textvariable=player_score_text, font=('Arial', '14', 'bold'))
+dealer_score_label = tk.Label(
+    root, textvariable=dealer_score_text, font=('Arial', '14', 'bold'))
 player_score_label.place(x=160, y=240)
 dealer_score_label.place(x=160, y=10)
 
@@ -395,22 +415,30 @@ player_canvas_img = [0] * MAX_CARDS_PAR_GAME
 for i in range(0, MAX_CARDS_PAR_GAME):
     dealer_canvas[i] = tk.Canvas(width=112, height=160)
     dealer_canvas[i].photo = empty_img
-    dealer_canvas_img[i] = dealer_canvas[i].create_image(0, 0, image=dealer_canvas[i].photo, anchor=tk.NW)
+    dealer_canvas_img[i] = dealer_canvas[i].create_image(
+        0, 0, image=dealer_canvas[i].photo, anchor=tk.NW)
     dealer_canvas[i].place(x=10+120*i, y=40)
     player_canvas[i] = tk.Canvas(width=112, height=160)
     player_canvas[i].photo = empty_img
-    player_canvas_img[i] = player_canvas[i].create_image(0, 0, image=player_canvas[i].photo, anchor=tk.NW)
+    player_canvas_img[i] = player_canvas[i].create_image(
+        0, 0, image=player_canvas[i].photo, anchor=tk.NW)
     player_canvas[i].place(x=10+120*i, y=270)
 
 # ボタンの作成と設置
 action_label = tk.Label(text="Action:", font=('Arial', '14', 'bold'))
 action_label.place(x=40+120*MAX_CARDS_PAR_GAME, y=160)
-start_button = tk.Button(width=14, text='Game Start', font=('Arial', '12', 'bold'), command=game_start)
-ht_button = tk.Button(width=15, text='HIT', font=('Arial', '12'), state=tk.DISABLED, command=hit)
-st_button = tk.Button(width=15, text='STAND', font=('Arial', '12'), state=tk.DISABLED, command=stand)
-dd_button = tk.Button(width=15, text='DOUBLE DOWN', font=('Arial', '12'), state=tk.DISABLED, command=double_down)
-sr_button = tk.Button(width=15, text='SURRENDER', font=('Arial', '12'), state=tk.DISABLED, command=surrender)
-quit_button = tk.Button(width=14, text='Quit', font=('Arial', '12', 'bold'), command=game_quit)
+start_button = tk.Button(width=14, text='Game Start', font=(
+    'Arial', '12', 'bold'), command=game_start)
+ht_button = tk.Button(width=15, text='HIT', font=(
+    'Arial', '12'), state=tk.DISABLED, command=hit)
+st_button = tk.Button(width=15, text='STAND', font=(
+    'Arial', '12'), state=tk.DISABLED, command=stand)
+dd_button = tk.Button(width=15, text='DOUBLE DOWN', font=(
+    'Arial', '12'), state=tk.DISABLED, command=double_down)
+sr_button = tk.Button(width=15, text='SURRENDER', font=(
+    'Arial', '12'), state=tk.DISABLED, command=surrender)
+quit_button = tk.Button(width=14, text='Quit', font=(
+    'Arial', '12', 'bold'), command=game_quit)
 start_button.place(x=40+120*MAX_CARDS_PAR_GAME, y=50)
 ht_button.place(x=40+120*MAX_CARDS_PAR_GAME, y=190)
 st_button.place(x=40+120*MAX_CARDS_PAR_GAME, y=225)

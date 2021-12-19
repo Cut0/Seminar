@@ -44,12 +44,12 @@ if len(sys.argv) < 3:
     print('')
     exit()
 
-filename = sys.argv[1] # CSVファイル名
-n_test_samples = int(sys.argv[2]) # テストデータの数
+filename = sys.argv[1]  # CSVファイル名
+n_test_samples = int(sys.argv[2])  # テストデータの数
 
-header, data = read_csv(filename, encoding=FILE_ENCODING) # CSVファイル読込
+header, data = read_csv(filename, encoding=FILE_ENCODING)  # CSVファイル読込
 
-n_total = len(data) # 全データ数
+n_total = len(data)  # 全データ数
 
 # 出力用のファイルを作成
 p = filename.rfind('.')

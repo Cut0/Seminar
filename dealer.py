@@ -50,7 +50,7 @@ def get_info(card):
 
 # ここから処理開始
 if __name__ == '__main__':
-    
+
     # カードセットを準備
     card_set = CardSet(n_decks=N_DECKS)
 
@@ -81,7 +81,7 @@ if __name__ == '__main__':
             print('A player has come.')
 
             if game_ID % N_GAMES == 0:
-                card_set.shuffle() # N_GAMES 回ゲームを行ったらカードセットをシャッフル
+                card_set.shuffle()  # N_GAMES 回ゲームを行ったらカードセットをシャッフル
                 print('Card set has been shuffled.')
             game_ID += 1
             print('Num. remaining cards: ', card_set.remaining_cards())
@@ -97,7 +97,8 @@ if __name__ == '__main__':
             pc0 = get_info(player_hand.cards[0])
             pc1 = get_info(player_hand.cards[1])
             dc0 = get_info(dealer_hand.cards[0])
-            player_soc.send(bytes("{0},{1},{2}".format(pc0, pc1, dc0), 'utf-8'))
+            player_soc.send(
+                bytes("{0},{1},{2}".format(pc0, pc1, dc0), 'utf-8'))
 
             # プレイヤーのアクションを受信して応答する（ループ処理）
             while True:
@@ -119,7 +120,8 @@ if __name__ == '__main__':
                     player_score = player_hand.get_score()
                     player_status = 'bust' if player_hand.is_busted() else 'unsettled'
                     rate = 0
-                    player_soc.send(bytes("{0},{1},{2},{3}".format(pc, player_score, player_status, rate), 'utf-8'))
+                    player_soc.send(bytes("{0},{1},{2},{3}".format(
+                        pc, player_score, player_status, rate), 'utf-8'))
 
                     print("The player's status: ", player_status)
 
@@ -140,7 +142,8 @@ if __name__ == '__main__':
                     # 現在のスコア，現在のステータス（勝敗結果），配当倍率，ディーラーカード（最初の1枚以外）の
                     # 4つの情報をこの順でプレイヤーに通知
                     player_score = player_hand.get_score()
-                    msg = "{0},{1},{2}".format(player_score, player_status, rate)
+                    msg = "{0},{1},{2}".format(
+                        player_score, player_status, rate)
                     for i in range(1, len(dealer_hand.cards)):
                         dc = get_info(dealer_hand.cards[i])
                         msg += ",{0}".format(dc)
@@ -166,7 +169,8 @@ if __name__ == '__main__':
                         # 4つの情報をこの順でプレイヤーに通知
                         player_status = 'bust'
                         rate = 0
-                        player_soc.send(bytes("{0},{1},{2},{3}".format(pc, player_score, player_status, rate), 'utf-8'))
+                        player_soc.send(bytes("{0},{1},{2},{3}".format(
+                            pc, player_score, player_status, rate), 'utf-8'))
 
                     # プレイヤーがバーストしなかった場合
                     else:
@@ -180,7 +184,8 @@ if __name__ == '__main__':
 
                         # 配布されたカード，現在のスコア，現在のステータス（勝敗結果），配当倍率，ディーラーカード（最初の1枚以外）の
                         # 5つの情報をこの順でプレイヤーに通知
-                        msg = "{0},{1},{2},{3}".format(pc, player_score, player_status, rate)
+                        msg = "{0},{1},{2},{3}".format(
+                            pc, player_score, player_status, rate)
                         for i in range(1, len(dealer_hand.cards)):
                             dc = get_info(dealer_hand.cards[i])
                             msg += ",{0}".format(dc)
@@ -199,7 +204,8 @@ if __name__ == '__main__':
                     player_score = player_hand.get_score()
                     player_status = 'surrendered'
                     rate = 0.5
-                    player_soc.send(bytes("{0},{1},{2}".format(player_score, player_status, rate), 'utf-8'))
+                    player_soc.send(bytes("{0},{1},{2}".format(
+                        player_score, player_status, rate), 'utf-8'))
 
                     print("The player's status: ", player_status)
 

@@ -274,7 +274,7 @@ def double_down():
             dc = int(msg[i])
             dealer_hand.append(dc)  # ディーラーの手配を更新
             print('  dealer-card {0}: '.format(i - 2), get_card_info(dc))
-        print('  dealer's score: ', dealer_hand.get_score())
+        print("  dealer's score: ", dealer_hand.get_score())
 
         # 所持金額を更新
         money += int(current_bet * rate)
