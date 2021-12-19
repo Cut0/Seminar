@@ -4,7 +4,6 @@ import numpy as np
 from classes import Hand
 from config import PORT, BET, INITIAL_MONEY
 
-
 ### グローバル変数 ###
 
 # 所持金の設定
@@ -24,208 +23,43 @@ soc = None
 
 # 他にも自分で色々な変数を定義して良い
 
-
 ### ここまで ###
 
 LOG_FILE = "./log/ai_player_log.csv"
 
 normal_map = [
     # 自分が5以下のとき
-    [
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "SR",
-    ],
+    ["H", "H", "H", "H", "H", "H", "H", "H", "H", "SR"],
     # 自分が6のとき
-    [
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "SR",
-    ],
+    ["H", "H", "H", "H", "H", "H", "H", "H", "H", "SR"],
     # 自分が7のとき
-    [
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "SR",
-    ],
+    ["H", "H", "H", "H", "H", "H", "H", "H", "H", "SR"],
     # 自分が8のとき
-    [
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-    ],
+    ["H", "H", "H", "H", "H", "H", "H", "H", "H", "H"],
     # 自分が9のとき
-    [
-        "H",
-        "D",
-        "D",
-        "D",
-        "D",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-    ],
+    ["H", "D", "D", "D", "D", "H", "H", "H", "H", "H"],
     # 自分が10のとき
-    [
-        "D",
-        "D",
-        "D",
-        "D",
-        "D",
-        "D",
-        "D",
-        "D",
-        "H",
-        "H",
-    ],
+    ["D", "D", "D", "D", "D", "D", "D", "D", "H", "H"],
     # 自分が11のとき
-    [
-        "D",
-        "D",
-        "D",
-        "D",
-        "D",
-        "D",
-        "D",
-        "D",
-        "D",
-        "H",
-    ],
+    ["D", "D", "D", "D", "D", "D", "D", "D", "D", "H"],
     # 自分が12のとき
-    [
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "SR",
-    ],
+    ["H", "H", "H", "H", "H", "H", "H", "H", "H", "SR"],
     # 自分が13のとき
-    [
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "SR",
-    ],
+    ["H", "H", "H", "H", "H", "H", "H", "H", "H", "SR"],
     # 自分が14のとき
-    [
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "SR",
-        "SR",
-    ],
+    ["H", "H", "H", "H", "H", "H", "H", "H", "SR", "SR"],
     # 自分が15のとき
-    [
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "SR",
-        "SR",
-    ],
+    ["H", "H", "H", "H", "H", "H", "H", "H", "SR", "SR"],
     # 自分が16のとき
-    [
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "SR",
-        "SR",
-    ],
+    ["H", "H", "H", "H", "H", "H", "H", "H", "SR", "SR"],
     # 自分が17のとき
-    [
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "H",
-        "S",
-        "S",
-        "SR",
-    ],
+    ["H", "H", "H", "H", "H", "H", "H", "S", "S", "SR"],
     # 自分が18のとき
-    [
-        "S",
-        "S",
-        "S",
-        "S",
-        "S",
-        "S",
-        "S",
-        "H",
-        "H",
-        "S",
-    ],
+    ["S", "S", "S", "S", "S", "S", "S", "H", "H", "S"],
     # 自分が19以上のとき
-    [
-        "S",
-        "S",
-        "S",
-        "S",
-        "S",
-        "S",
-        "S",
-        "S",
-        "S",
-        "S",
-    ],
+    ["S", "S", "S", "S", "S", "S", "S", "S", "S", "S"]
 ]
+
 
 # カードのスート・数字を取得
 def get_card_info(card):
@@ -318,7 +152,8 @@ def hit():
     rate = float(rate)
     player_hand.append(pc)
 
-    print("  player-card {0}: ".format(len(player_hand.cards)), get_card_info(pc))
+    print("  player-card {0}: ".format(len(player_hand.cards)),
+          get_card_info(pc))
     print("  current score: ", player_hand.get_score())
 
     # 行動前スコア，行動，行動後スコア，行動後ステータスをログに記録しておく
@@ -415,11 +250,13 @@ def double_down():
     rate = float(msg[3])
     player_hand.append(pc)
 
-    print("  player-card {0}: ".format(len(player_hand.cards)), get_card_info(pc))
+    print("  player-card {0}: ".format(len(player_hand.cards)),
+          get_card_info(pc))
     print("  current score: ", player_hand.get_score())
 
     # 行動前スコア，行動，行動後スコア，行動後ステータスをログに記録しておく
-    print("{0},DOUBLE DOWN,{1},{2}".format(prev_score, score, result), file=logf)
+    print("{0},DOUBLE DOWN,{1},{2}".format(prev_score, score, result),
+          file=logf)
 
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
@@ -477,6 +314,7 @@ def surrender():
 
     # 所持金額を更新
     money += int(current_bet * rate)
+
     current_bet = 0
 
     print("Game finished.")
