@@ -372,7 +372,7 @@ def strategy():
 
     # 自分のカードの数字を保存
     player_cards_number = []
-    for card in player_cards_number:
+    for card in player_hand.cards:
         player_cards_number.append(card % 13 + 1)
 
     have_ace = player_hand.have_ace
@@ -392,9 +392,8 @@ def strategy():
                     ans = ace_map[card - 2][9]
                 else:
                     ans = ace_map[card - 2][dealer_card_number - 1]
-
     # 自分のカード2枚のうち、Aがない場合
-    else:
+    if ans == None:
         if ps <= 5:
             if dealer_card_number >= 10:
                 ans = normal_map[0][9]
