@@ -375,16 +375,15 @@ def strategy():
     for card in player_cards_number:
         player_cards_number.append(card % 13 + 1)
 
-
     have_ace = player_hand.have_ace
     ps = player_hand.get_score()
-    
+
     print("プレイヤーのカード枚数", len(player_hand.cards))
     print("プレイヤーのカード1枚目", player_hand.cards[0])
     print("プレイヤーのカード2枚目", player_hand.cards[1])
     print("現在のプレイヤーのスコア", ps)
-   
-    ans = None # 行う行動を保存(string型)
+
+    ans = None  # 行う行動を保存(string型)
     # 自分のカード2枚のうち、片方にAがある場合
     if have_ace:
         for card in player_cards_number:
@@ -411,8 +410,8 @@ def strategy():
                 ans = normal_map[ps - 5][9]
             else:
                 ans = normal_map[ps - 5][dealer_card_number - 1]
-   
-    return_value = None # 行う行動を保存
+
+    return_value = None  # 行う行動を保存
     if ans == "H":
         return_value = hit()
     elif ans == "S":
