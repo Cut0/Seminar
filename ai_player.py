@@ -368,40 +368,56 @@ def strategy():
 
     # 「現在の状態」に保存
     player_score = player_hand.get_score()
-    dealer_card_number = (dealer_hand.cards[0] % 13) + 1
+    dealer_card_number = dealer_hand.cards[0] % 13 + 1
+
+    # 自分のカードの数字を保存
+    player_cards_number = []
+    for card in player_hand.cards:
+        player_cards_number.append(card % 13 + 1)
 
     have_ace = player_hand.have_ace
-
-    """
-    print("プレイヤーのカード枚数", len(player_hand.cards))
-    print("プレイヤーのカード1枚目", (player_hand.cards[0] % 13) + 1)
-    print("プレイヤーのカード2枚目", (player_hand.cards[1] % 13) + 1)
-    """
-
     ps = player_hand.get_score()
+
+    print("プレイヤーのカード枚数", len(player_hand.cards))
     print("現在のプレイヤーのスコア", ps)
 
-    if ps == 10 or ps == 11:
-        return_value = double_down()
-    elif 15 <= ps and ps <= 17:
-        return_value = surrender()
-    elif ps >= 18:
-        return_value = stand()
-    else:
-        return_value = hit()
+    ans = None  # 行う行動を保存(string型)
+    # 自分のカード2枚のうち、片方にAがある場合
+    if have_ace:
+        for card in player_cards_number:
+            if card >= 2 and card <= 8:
+                if dealer_card_number >= 10:
+                    ans = ace_map[card - 2][9]
+                else:
+                    ans = ace_map[card - 2][dealer_card_number - 1]
+    # 自分のカード2枚のうち、Aがない場合
+    if ans == None:
+        if ps <= 5:
+            if dealer_card_number >= 10:
+                ans = normal_map[0][9]
+            else:
+                ans = normal_map[0][dealer_card_number - 1]
+        elif ps >= 19:
+            if dealer_card_number >= 10:
+                ans = normal_map[14][9]
+            else:
+                ans = normal_map[14][dealer_card_number - 1]
+        else:
+            if dealer_card_number >= 10:
+                ans = normal_map[ps - 5][9]
+            else:
+                ans = normal_map[ps - 5][dealer_card_number - 1]
 
-    """
-    # ランダムに行動するAIを実装してみる
-    a = np.random.randint(0, 4) # 0以上4未満の整数乱数を生成（つまり，a は 0,1,2,3 のいずれか）
-    if a == 0:
+    return_value = None  # 行う行動を保存
+    if ans == "H":
         return_value = hit()
-    elif a == 1:
+    elif ans == "S":
         return_value = stand()
-    elif a == 2:
+    elif ans == "D":
         return_value = double_down()
-    else:
+    elif ans == "SR":
         return_value = surrender()
-    """
+
     if return_value is True:
         n = len(dealer_hand.cards)
         if n <= 1:
@@ -410,6 +426,7 @@ def strategy():
         n_used_cards += n
         print("今ゲームで使用したカードの枚数", n)
         print("これまでの全ゲームで使用したカードの枚数", n_used_cards)
+
     return return_value
 
 
