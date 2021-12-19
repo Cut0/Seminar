@@ -155,7 +155,7 @@ def game_start(n=1):
 
 
 # ディーラーに HIT を要求する
-def hit():
+def hit(write_csv=True):
 
     global money, current_bet, player_hand, dealer_hand, soc
 
@@ -184,8 +184,9 @@ def hit():
     global n_used_cards
     global player_score
     global dealer_card_number
-    print("{0},HIT,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
-          status, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
+    if write_csv:
+        print("{0},HIT,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
+                                                       status, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
 
     # バーストした場合はゲーム終了
     if status == "bust":
@@ -206,7 +207,7 @@ def hit():
 
 
 # ディーラーに STAND を要求する
-def stand():
+def stand(write_csv=True):
 
     global money, current_bet, player_hand, dealer_hand, soc
 
@@ -236,8 +237,9 @@ def stand():
     global n_used_cards
     global player_score
     global dealer_card_number
-    print("{0},STAND,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
-          result, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
+    if write_csv:
+        print("{0},STAND,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
+                                                         result, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
 
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
@@ -253,7 +255,7 @@ def stand():
 
 
 # ディーラーに DOUBLE DOWN を要求する
-def double_down():
+def double_down(write_csv=True):
 
     global money, current_bet, player_hand, dealer_hand, soc
 
@@ -290,8 +292,9 @@ def double_down():
     global n_used_cards
     global player_score
     global dealer_card_number
-    print("{0},DOUBLE DOWN,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
-          result, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
+    if write_csv:
+        print("{0},DOUBLE DOWN,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
+                                                               result, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
 
@@ -321,7 +324,7 @@ def double_down():
 
 
 # ディーラーに SURRENDER を要求する
-def surrender():
+def surrender(write_csv=True):
 
     global money, current_bet, player_hand, dealer_hand, soc
 
@@ -344,8 +347,9 @@ def surrender():
     global n_used_cards
     global player_score
     global dealer_card_number
-    print("{0},SURRENDER,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
-          status, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
+    if write_csv:
+        print("{0},SURRENDER,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
+                                                             status, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
 
@@ -461,13 +465,13 @@ def model_strategy():
 
     return_value = None  # 行う行動を保存
     if ans == "H":
-        return_value = hit()
+        return_value = hit(False)
     elif ans == "S":
-        return_value = stand()
+        return_value = stand(False)
     elif ans == "D":
-        return_value = double_down()
+        return_value = double_down(False)
     elif ans == "SR":
-        return_value = surrender()
+        return_value = surrender(False)
 
     if return_value is True:
         n = len(dealer_hand.cards)
