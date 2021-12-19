@@ -3,6 +3,7 @@ import socket
 import numpy as np
 from classes import Hand
 from config import PORT, BET, INITIAL_MONEY
+from test import output
 
 
 ### グローバル変数 ###
@@ -154,7 +155,7 @@ def game_start(n=1):
 
 
 # ディーラーに HIT を要求する
-def hit():
+def hit(write_csv=True):
 
     global money, current_bet, player_hand, dealer_hand, soc
 
@@ -183,8 +184,9 @@ def hit():
     global n_used_cards
     global player_score
     global dealer_card_number
-    print("{0},HIT,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
-          status, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
+    if write_csv:
+        print("{0},HIT,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
+                                                       status, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
 
     # バーストした場合はゲーム終了
     if status == "bust":
@@ -205,7 +207,7 @@ def hit():
 
 
 # ディーラーに STAND を要求する
-def stand():
+def stand(write_csv=True):
 
     global money, current_bet, player_hand, dealer_hand, soc
 
@@ -235,8 +237,9 @@ def stand():
     global n_used_cards
     global player_score
     global dealer_card_number
-    print("{0},STAND,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
-          result, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
+    if write_csv:
+        print("{0},STAND,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
+                                                         result, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
 
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
@@ -252,7 +255,7 @@ def stand():
 
 
 # ディーラーに DOUBLE DOWN を要求する
-def double_down():
+def double_down(write_csv=True):
 
     global money, current_bet, player_hand, dealer_hand, soc
 
@@ -289,8 +292,9 @@ def double_down():
     global n_used_cards
     global player_score
     global dealer_card_number
-    print("{0},DOUBLE DOWN,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
-          result, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
+    if write_csv:
+        print("{0},DOUBLE DOWN,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
+                                                               result, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
 
@@ -320,7 +324,7 @@ def double_down():
 
 
 # ディーラーに SURRENDER を要求する
-def surrender():
+def surrender(write_csv=True):
 
     global money, current_bet, player_hand, dealer_hand, soc
 
@@ -343,8 +347,9 @@ def surrender():
     global n_used_cards
     global player_score
     global dealer_card_number
-    print("{0},SURRENDER,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
-          status, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
+    if write_csv:
+        print("{0},SURRENDER,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
+                                                             status, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
 
@@ -430,6 +435,56 @@ def strategy():
     return return_value
 
 
+def model_strategy():
+    # グローバル変数
+    # 自分で追加定義したグローバル変数がある場合は，その変数名を下の行に追加すると関数内で使えるようになる
+    global player_hand, dealer_hand
+    global n_used_cards
+    global player_score
+    global dealer_card_number
+
+    # 「現在の状態」に保存
+    player_score = player_hand.get_score()
+    dealer_card_number = dealer_hand.cards[0] % 13 + 1
+
+    # 自分のカードの数字を保存
+    player_cards_number = []
+    for card in player_hand.cards:
+        player_cards_number.append(card % 13 + 1)
+
+    have_ace = player_hand.have_ace
+    ps = player_hand.get_score()
+
+    print("プレイヤーのカード枚数", len(player_hand.cards))
+    print("現在のプレイヤーのスコア", ps)
+
+    data = np.asarray([ps, n_used_cards, dealer_card_number,
+                       player_cards_number[0], player_cards_number[1]], dtype=np.float32)
+
+    ans = output(data)
+
+    return_value = None  # 行う行動を保存
+    if ans == "H":
+        return_value = hit(False)
+    elif ans == "S":
+        return_value = stand(False)
+    elif ans == "D":
+        return_value = double_down(False)
+    elif ans == "SR":
+        return_value = surrender(False)
+
+    if return_value is True:
+        n = len(dealer_hand.cards)
+        if n <= 1:
+            n += 1
+        n += len(player_hand.cards)
+        n_used_cards += n
+        print("今ゲームで使用したカードの枚数", n)
+        print("これまでの全ゲームで使用したカードの枚数", n_used_cards)
+
+    return return_value
+
+
 # ゲーム実行
 if __name__ == "__main__":
 
@@ -441,8 +496,12 @@ if __name__ == "__main__":
     for n in range(n_games):
         game_start(n+1)
         while True:
-            if strategy():
-                break
+            if len(sys.argv) == 3 and sys.argv[2] == 'model':
+                if model_strategy():
+                    break
+            else:
+                if strategy():
+                    break
         print("")
 
     # ログファイルを閉じる
