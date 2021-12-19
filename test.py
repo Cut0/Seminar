@@ -32,7 +32,7 @@ def predict(net, vec):
     x = torch.tensor([vec], device='cpu')  # 入力ベクトル vec をPyTorch用の型に変換
     z = F.softmax(net(x), dim=1)  # AIによる推定．Softmaxを適用して確率（っぽい値）を返すようにする
     z = z.to('cpu').detach().numpy().copy()[0]  # 結果をnumpy.ndarray 型に変換して返却
-    z = np.argmax(output)
+    z = np.argmax(z)
     return actions[z]
 
 
