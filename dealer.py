@@ -21,26 +21,26 @@ def init_hands(card_set, dealer_hand, player_hand):
 def judge(dealer_hand, player_hand):
 
     if player_hand.is_busted():
-        return 'lose', 0
+        return "lose", 0
     elif player_hand.is_nbj():
         if dealer_hand.is_nbj():
-            return 'draw', 1
+            return "draw", 1
         else:
-            return 'win', 2.5
+            return "win", 2.5
     else:
         if dealer_hand.is_busted():
-            return 'win', 2
+            return "win", 2
         elif dealer_hand.is_nbj():
-            return 'lose', 0
+            return "lose", 0
         else:
             player_score = player_hand.get_score()
             dealer_score = dealer_hand.get_score()
             if player_score > dealer_score:
-                return 'win', 2
+                return "win", 2
             elif player_score < dealer_score:
-                return 'lose', 0
+                return "lose", 0
             else:
-                return 'draw', 1
+                return "draw", 1
 
 
 # カードIDからスートと数字の情報のみを抽出する
@@ -49,7 +49,7 @@ def get_info(card):
 
 
 # ここから処理開始
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     # カードセットを準備
     card_set = CardSet(n_decks=N_DECKS)
@@ -59,9 +59,9 @@ if __name__ == '__main__':
     soc.settimeout(1.0)
     soc.bind((socket.gethostname(), PORT))
     soc.listen(1)
-    print('The dealer program has started!!')
+    print("The dealer program has started!!")
     print()
-    print('Wainting for a new player ...')
+    print("Wainting for a new player ...")
 
     # 現在が何回目のゲームかを示す変数を用意し，0で初期化
     game_ID = 0
@@ -78,16 +78,16 @@ if __name__ == '__main__':
             raise
         else:
 
-            print('A player has come.')
+            print("A player has come.")
 
             if game_ID % N_GAMES == 0:
                 card_set.shuffle()  # N_GAMES 回ゲームを行ったらカードセットをシャッフル
-                print('Card set has been shuffled.')
+                print("Card set has been shuffled.")
             game_ID += 1
-            print('Num. remaining cards: ', card_set.remaining_cards())
+            print("Num. remaining cards: ", card_set.remaining_cards())
 
             # プレイヤーからの通信をキャッチしたら，まずディーラーとプレイヤーに2枚ずつカードを配る
-            print('Game start!!')
+            print("Game start!!")
             dealer_hand = Hand()
             player_hand = Hand()
             init_hands(card_set, dealer_hand, player_hand)
@@ -98,7 +98,7 @@ if __name__ == '__main__':
             pc1 = get_info(player_hand.cards[1])
             dc0 = get_info(dealer_hand.cards[0])
             player_soc.send(
-                bytes("{0},{1},{2}".format(pc0, pc1, dc0), 'utf-8'))
+                bytes("{0},{1},{2}".format(pc0, pc1, dc0), "utf-8"))
 
             # プレイヤーのアクションを受信して応答する（ループ処理）
             while True:
@@ -109,7 +109,7 @@ if __name__ == '__main__':
                 print("The player's action: ", msg)
 
                 # HIT の場合
-                if msg == 'hit':
+                if msg == "hit":
 
                     # プレイヤーに1枚カードを配る
                     player_hand.append(card_set.draw())
@@ -118,19 +118,19 @@ if __name__ == '__main__':
                     # 4つの情報をこの順でプレイヤーに通知
                     pc = get_info(player_hand.cards[-1])
                     player_score = player_hand.get_score()
-                    player_status = 'bust' if player_hand.is_busted() else 'unsettled'
+                    player_status = "bust" if player_hand.is_busted() else "unsettled"
                     rate = 0
                     player_soc.send(bytes("{0},{1},{2},{3}".format(
-                        pc, player_score, player_status, rate), 'utf-8'))
+                        pc, player_score, player_status, rate), "utf-8"))
 
                     print("The player's status: ", player_status)
 
                     # プレイヤーがバーストした場合はゲーム終了
-                    if player_status == 'bust':
+                    if player_status == "bust":
                         break
 
                 # STAND の場合
-                elif msg == 'stand':
+                elif msg == "stand":
 
                     # ルールに従ってディーラーにカードを追加
                     while dealer_hand.get_score() < 17 and len(dealer_hand.cards) < MAX_CARDS_PAR_GAME:
@@ -147,15 +147,15 @@ if __name__ == '__main__':
                     for i in range(1, len(dealer_hand.cards)):
                         dc = get_info(dealer_hand.cards[i])
                         msg += ",{0}".format(dc)
-                    player_soc.send(bytes(msg, 'utf-8'))
+                    player_soc.send(bytes(msg, "utf-8"))
 
-                    print("The player's status: ", player_status)
+                    print("The player' status: ", player_status)
 
                     # 結果によらずゲーム終了
                     break
 
                 # DOUBLE DOWNの場合
-                elif msg == 'double_down':
+                elif msg == "double_down":
 
                     # プレイヤーに1枚カードを配る
                     player_hand.append(card_set.draw())
@@ -167,10 +167,10 @@ if __name__ == '__main__':
 
                         # 配布されたカード，現在のスコア，現在のステータス（勝敗結果），配当倍率の
                         # 4つの情報をこの順でプレイヤーに通知
-                        player_status = 'bust'
+                        player_status = "bust"
                         rate = 0
                         player_soc.send(bytes("{0},{1},{2},{3}".format(
-                            pc, player_score, player_status, rate), 'utf-8'))
+                            pc, player_score, player_status, rate), "utf-8"))
 
                     # プレイヤーがバーストしなかった場合
                     else:
@@ -189,7 +189,7 @@ if __name__ == '__main__':
                         for i in range(1, len(dealer_hand.cards)):
                             dc = get_info(dealer_hand.cards[i])
                             msg += ",{0}".format(dc)
-                        player_soc.send(bytes(msg, 'utf-8'))
+                        player_soc.send(bytes(msg, "utf-8"))
 
                     print("The player's status: ", player_status)
 
@@ -197,15 +197,15 @@ if __name__ == '__main__':
                     break
 
                 # SURRENDERの場合
-                elif msg == 'surrender':
+                elif msg == "surrender":
 
                     # 現在のスコア，現在のステータス（サレンダーを受け付けたこと），配当倍率の
                     # 3つの情報をこの順でプレイヤーに通知
                     player_score = player_hand.get_score()
-                    player_status = 'surrendered'
+                    player_status = "surrendered"
                     rate = 0.5
                     player_soc.send(bytes("{0},{1},{2}".format(
-                        player_score, player_status, rate), 'utf-8'))
+                        player_score, player_status, rate), "utf-8"))
 
                     print("The player's status: ", player_status)
 
@@ -218,8 +218,8 @@ if __name__ == '__main__':
 
             # 通信終了
             player_soc.close()
-            print('The game has finished!')
+            print("The game has finished!")
             print()
-            print('Wainting for a new player ...')
+            print("Wainting for a new player ...")
 
     soc.close()
