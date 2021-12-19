@@ -64,7 +64,7 @@ normal_map = [
     ["S", "S", "S", "S", "S", "S", "S", "S", "S", "S"]
 ]
 
-#自分のカード2枚のうち、片方にAがある場合
+# 自分のカード2枚のうち、片方にAがある場合
 ace_map = [
     # Aではない方のカードが2のとき
     ["H", "H", "H", "D", "D", "H", "H", "H", "H", "H"],
@@ -83,6 +83,8 @@ ace_map = [
 ]
 
 # カードのスート・数字を取得
+
+
 def get_card_info(card):
 
     n = (card % 13) + 1
@@ -367,6 +369,8 @@ def strategy():
     # 「現在の状態」に保存
     player_score = player_hand.get_score()
     dealer_card_number = dealer_hand.cards[0] % 13
+
+    have_ace = player_hand.have_ace
 
     print("プレイヤーのカード枚数", len(player_hand.cards))
     print("プレイヤーのカード1枚目", player_hand.cards[0])

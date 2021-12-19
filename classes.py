@@ -43,18 +43,18 @@ class Hand:
     # 現在のスコアを計算
     def get_score(self):
         tmp = []
-        have_ace = False
+        self.have_ace = False
         for i in self.cards:
             j = min(10, (i % 13) + 1)
             if j != 1:
                 tmp.append(j)
             else:
-                if have_ace:
+                if self.have_ace:
                     tmp.append(1)
                 else:
-                    have_ace = True
+                    self.have_ace = True
         score = sum(tmp)
-        if have_ace:
+        if self.have_ace:
             if score + 11 > 21:
                 score += 1
             else:
