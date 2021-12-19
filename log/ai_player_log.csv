@@ -1,1 +1,4 @@
 score (before),action,score (after),score (status),n_used_cards, dealer_card_number, player_card_1, player_card_2
+8,HIT,16,unsettled,0,2,6,2
+16,HIT,18,unsettled,0,2,6,2
+18,STAND,18,win,0,2,6,2
