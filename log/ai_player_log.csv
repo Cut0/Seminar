@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 score (before),action,score (after),score (status)
 11,DOUBLE DOWN,21,draw,0,11,7
 16,SURRENDER,16,surrendered,0,16,12
@@ -1724,3 +1725,6 @@ score (before),action,score (after),score (status)
 9,HIT,12,unsettled,5438,9,12
 12,HIT,21,unsettled,5438,12,12
 21,STAND,21,win,5438,21,12
+=======
+score (before),action,score (after),score (status),n_used_cards, dealer_card_number, player_card_1, player_card_2
+>>>>>>> 1400cec41fc24a7ff8c2c247e6f64fd39b012de1

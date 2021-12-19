@@ -183,8 +183,8 @@ def hit():
     global n_used_cards
     global player_score
     global dealer_card_number
-    print("{0},HIT,{1},{2},{3},{4},{5}".format(prev_score, score,
-          status, n_used_cards, player_score, dealer_card_number), file=logf)
+    print("{0},HIT,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
+          status, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
 
     # バーストした場合はゲーム終了
     if status == "bust":
@@ -235,8 +235,8 @@ def stand():
     global n_used_cards
     global player_score
     global dealer_card_number
-    print("{0},STAND,{1},{2},{3},{4},{5}".format(prev_score, score,
-          result, n_used_cards, player_score, dealer_card_number), file=logf)
+    print("{0},STAND,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
+          result, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
 
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
@@ -289,8 +289,8 @@ def double_down():
     global n_used_cards
     global player_score
     global dealer_card_number
-    print("{0},DOUBLE DOWN,{1},{2},{3},{4},{5}".format(prev_score, score,
-          result, n_used_cards, player_score, dealer_card_number), file=logf)
+    print("{0},DOUBLE DOWN,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
+          result, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
 
@@ -343,8 +343,8 @@ def surrender():
     global n_used_cards
     global player_score
     global dealer_card_number
-    print("{0},SURRENDER,{1},{2},{3},{4},{5}".format(prev_score, score,
-          status, n_used_cards, player_score, dealer_card_number), file=logf)
+    print("{0},SURRENDER,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
+          status, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
 
@@ -379,8 +379,6 @@ def strategy():
     ps = player_hand.get_score()
 
     print("プレイヤーのカード枚数", len(player_hand.cards))
-    print("プレイヤーのカード1枚目", player_hand.cards[0])
-    print("プレイヤーのカード2枚目", player_hand.cards[1])
     print("現在のプレイヤーのスコア", ps)
 
     ans = None  # 行う行動を保存(string型)
