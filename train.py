@@ -40,7 +40,7 @@ def read_numerical_data(filename, encoding):
     y_set = []
     for row in reader:  # 行ごとに処理を行う
         # 数負けとバースト負けの行は読み飛ばす
-        if row[3] == "lose" and row[3] == "bust":
+        if row[3] == "lose" or row[3] == "bust":
             continue
 
         # 空の入力ベクトル(5要素)を用意する
