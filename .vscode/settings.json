@@ -1,0 +1,5 @@
+{
+  // "python.pythonPath": "which python の結果(例: ~/.pyenv/shims/python)",
+  // "python.defaultInterpreterPath": "which python の結果(例: ~/.pyenv/shims/python)",
+  "python.formatting.provider": "autopep8"
+}
