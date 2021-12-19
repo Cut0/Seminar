@@ -496,8 +496,12 @@ if __name__ == "__main__":
     for n in range(n_games):
         game_start(n+1)
         while True:
-            if model_strategy():
-                break
+            if len(sys.argv) == 3 and sys.argv[2] == 'model':
+                if model_strategy():
+                    break
+            else:
+                if strategy():
+                    break
         print("")
 
     # ログファイルを閉じる
