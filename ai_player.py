@@ -3,6 +3,7 @@ import socket
 import numpy as np
 from classes import Hand
 from config import PORT, BET, INITIAL_MONEY
+from test import output
 
 
 ### グローバル変数 ###
@@ -407,6 +408,56 @@ def strategy():
                 ans = normal_map[ps - 5][9]
             else:
                 ans = normal_map[ps - 5][dealer_card_number - 1]
+
+    return_value = None  # 行う行動を保存
+    if ans == "H":
+        return_value = hit()
+    elif ans == "S":
+        return_value = stand()
+    elif ans == "D":
+        return_value = double_down()
+    elif ans == "SR":
+        return_value = surrender()
+
+    if return_value is True:
+        n = len(dealer_hand.cards)
+        if n <= 1:
+            n += 1
+        n += len(player_hand.cards)
+        n_used_cards += n
+        print("今ゲームで使用したカードの枚数", n)
+        print("これまでの全ゲームで使用したカードの枚数", n_used_cards)
+
+    return return_value
+
+
+def model_strategy():
+    # グローバル変数
+    # 自分で追加定義したグローバル変数がある場合は，その変数名を下の行に追加すると関数内で使えるようになる
+    global player_hand, dealer_hand
+    global n_used_cards
+    global player_score
+    global dealer_card_number
+
+    # 「現在の状態」に保存
+    player_score = player_hand.get_score()
+    dealer_card_number = dealer_hand.cards[0] % 13 + 1
+
+    # 自分のカードの数字を保存
+    player_cards_number = []
+    for card in player_hand.cards:
+        player_cards_number.append(card % 13 + 1)
+
+    have_ace = player_hand.have_ace
+    ps = player_hand.get_score()
+
+    print("プレイヤーのカード枚数", len(player_hand.cards))
+    print("現在のプレイヤーのスコア", ps)
+
+    data = np.asarray([ps, n_used_cards, dealer_card_number,
+                       player_cards_number[0], player_cards_number[1]], dtype=np.float32)
+
+    ans = output(data)
 
     return_value = None  # 行う行動を保存
     if ans == "H":
