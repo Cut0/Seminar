@@ -4,6 +4,7 @@ import numpy as np
 from classes import Hand
 from config import PORT, BET, INITIAL_MONEY
 
+
 ### グローバル変数 ###
 
 # 所持金の設定
@@ -22,6 +23,9 @@ dealer_hand = Hand()
 soc = None
 
 # 他にも自分で色々な変数を定義して良い
+player_score = -1
+dealer_card_number = -1
+n_used_cards = 0
 
 ### ここまで ###
 
@@ -90,7 +94,7 @@ def get_card_info(card):
 
 
 # ゲームを開始する
-def game_start(n=1):
+def game_start(n = 1):
 
     global money, current_bet, player_hand, dealer_hand, soc
 
@@ -112,7 +116,7 @@ def game_start(n=1):
 
     # ディーラーからカード情報を受信
     msg = soc.recv(1024)
-    msg = msg.decode('utf-8')
+    msg = msg.decode("utf-8")
     pc1, pc2, dc = msg.split(',')
     pc1 = int(pc1)
     pc2 = int(pc2)
@@ -141,23 +145,25 @@ def hit():
     prev_score = player_hand.get_score()
 
     # ディーラーにメッセージを送信
-    soc.send(bytes('hit', 'utf-8'))
+    soc.send(bytes("hit", 'utf-8'))
 
     # 配布されたカード，現在のスコア，バーストしたか否かをディーラーから通知してもらう
     msg = soc.recv(1024)
-    msg = msg.decode('utf-8')
+    msg = msg.decode("utf-8")
     pc, score, status, rate = msg.split(',')
     pc = int(pc)
     score = int(score)
     rate = float(rate)
     player_hand.append(pc)
 
-    print('  player-card {0}: '.format(len(player_hand.cards)),
-          get_card_info(pc))
+    print('  player-card {0}: '.format(len(player_hand.cards)), get_card_info(pc))
     print('  current score: ', player_hand.get_score())
 
     # 行動前スコア，行動，行動後スコア，行動後ステータスをログに記録しておく
-    print('{0},HIT,{1},{2}'.format(prev_score, score, status), file=logf)
+    global n_used_cards
+    global player_score
+    global dealer_card_number
+    print('{0},HIT,{1},{2},{3},{4},{5}'.format(prev_score, score, status, n_used_cards, player_score, dealer_card_number), file=logf)
 
     # バーストした場合はゲーム終了
     if status == 'bust':
@@ -189,11 +195,11 @@ def stand():
     prev_score = player_hand.get_score()
 
     # ディーラーにメッセージを送信
-    soc.send(bytes('stand', 'utf-8'))
+    soc.send(bytes("stand", 'utf-8'))
 
     # スコア，勝敗結果，配当倍率，ディーラーカードをディーラーから通知してもらう
     msg = soc.recv(1024)
-    msg = msg.decode('utf-8')
+    msg = msg.decode("utf-8")
     msg = msg.split(',')
     result = msg[1]
     score = int(msg[0])
@@ -201,12 +207,15 @@ def stand():
     for i in range(3, len(msg)):
         dc = int(msg[i])
         dealer_hand.append(dc)
-        print('  dealer-card {0}: '.format(i - 1), get_card_info(dc))
+        print('  dealer-card {0}: '.format(i-1), get_card_info(dc))
     print("  dealer's score: ", dealer_hand.get_score())
 
     # 行動前スコア，行動，行動後スコア，行動後ステータスをログに記録しておく
-    print('{0},STAND,{1},{2}'.format(prev_score, score, result), file=logf)
-
+    global n_used_cards
+    global player_score
+    global dealer_card_number
+    print('{0},STAND,{1},{2},{3},{4},{5}'.format(prev_score, score, result, n_used_cards, player_score, dealer_card_number), file=logf)
+ 
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
 
@@ -238,11 +247,11 @@ def double_down():
     print('  bet: ', current_bet, '$')
 
     # ディーラーにメッセージを送信
-    soc.send(bytes('double_down', 'utf-8'))
+    soc.send(bytes("double_down", 'utf-8'))
 
     # 配布されたカード，スコア，勝敗結果，配当倍率，ディーラーカードディーラーから通知してもらう
     msg = soc.recv(1024)
-    msg = msg.decode('utf-8')
+    msg = msg.decode("utf-8")
     msg = msg.split(',')
     result = msg[2]
     pc = int(msg[0])
@@ -250,14 +259,14 @@ def double_down():
     rate = float(msg[3])
     player_hand.append(pc)
 
-    print('  player-card {0}: '.format(len(player_hand.cards)),
-          get_card_info(pc))
+    print('  player-card {0}: '.format(len(player_hand.cards)), get_card_info(pc))
     print('  current score: ', player_hand.get_score())
 
     # 行動前スコア，行動，行動後スコア，行動後ステータスをログに記録しておく
-    print('{0},DOUBLE DOWN,{1},{2}'.format(prev_score, score, result),
-          file=logf)
-
+    global n_used_cards
+    global player_score
+    global dealer_card_number
+    print('{0},DOUBLE DOWN,{1},{2},{3},{4},{5}'.format(prev_score, score, result, n_used_cards, player_score, dealer_card_number), file=logf)
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
 
@@ -272,8 +281,8 @@ def double_down():
 
         for i in range(4, len(msg)):
             dc = int(msg[i])
-            dealer_hand.append(dc)  # ディーラーの手配を更新
-            print('  dealer-card {0}: '.format(i - 2), get_card_info(dc))
+            dealer_hand.append(dc) # ディーラーの手配を更新
+            print('  dealer-card {0}: '.format(i-2), get_card_info(dc))
         print("  dealer's score: ", dealer_hand.get_score())
 
         # 所持金額を更新
@@ -297,24 +306,25 @@ def surrender():
     prev_score = player_hand.get_score()
 
     # ディーラーにメッセージを送信
-    soc.send(bytes('surrender', 'utf-8'))
+    soc.send(bytes("surrender", 'utf-8'))
 
     # スコア，サレンダー受付の返事，配当倍率をディーラーから通知してもらう
     msg = soc.recv(1024)
-    msg = msg.decode('utf-8')
+    msg = msg.decode("utf-8")
     score, status, rate = msg.split(',')
     score = int(score)
     rate = float(rate)
 
     # 行動前スコア，行動，行動後スコア，行動後ステータスをログに記録しておく
-    print('{0},SURRENDER,{1},{2}'.format(prev_score, score, status), file=logf)
-
+    global n_used_cards
+    global player_score
+    global dealer_card_number
+    print('{0},SURRENDER,{1},{2},{3},{4},{5}'.format(prev_score, score, status, n_used_cards, player_score, dealer_card_number), file=logf)
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
 
     # 所持金額を更新
     money += int(current_bet * rate)
-
     current_bet = 0
 
     print('Game finished.')
@@ -323,15 +333,37 @@ def surrender():
     return True
 
 
-# AIの行動戦略
 def strategy():
-
     # グローバル変数
     # 自分で追加定義したグローバル変数がある場合は，その変数名を下の行に追加すると関数内で使えるようになる
     global player_hand, dealer_hand
+    global n_used_cards
+    global player_score
+    global dealer_card_number
 
+    # 「現在の状態」に保存
+    player_score = player_hand.get_score()
+    dealer_card_number = dealer_hand.cards[0] % 13
+
+    print('プレイヤーのカード枚数',len(player_hand.cards))
+    print('プレイヤーのカード1枚目',player_hand.cards[0])
+    print('プレイヤーのカード2枚目',player_hand.cards[1])
+
+    ps = player_hand.get_score()
+    print('現在のプレイヤーのスコア', ps)
+
+    if ps == 10 or ps == 11:
+        return_value = double_down()
+    elif 15 <= ps and ps <= 17:
+        return_value = surrender()
+    elif ps >= 18:
+        return_value = stand()
+    else: 
+        return_value = hit()
+
+    '''
     # ランダムに行動するAIを実装してみる
-    a = np.random.randint(0, 4)  # 0以上4未満の整数乱数を生成（つまり，a は 0,1,2,3 のいずれか）
+    a = np.random.randint(0, 4) # 0以上4未満の整数乱数を生成（つまり，a は 0,1,2,3 のいずれか）
     if a == 0:
         return_value = hit()
     elif a == 1:
@@ -340,7 +372,15 @@ def strategy():
         return_value = double_down()
     else:
         return_value = surrender()
-
+    '''
+    if return_value is True:
+        n = len(dealer_hand.cards)
+        if n <= 1:
+            n += 1
+        n += len(player_hand.cards)
+        n_used_cards += n
+        print('今ゲームで使用したカードの枚数',n)
+        print('これまでの全ゲームで使用したカードの枚数',n_used_cards)
     return return_value
 
 
@@ -353,7 +393,7 @@ if __name__ == '__main__':
     logf = open(LOG_FILE, 'a')
 
     for n in range(n_games):
-        game_start(n + 1)
+        game_start(n+1)
         while True:
             if strategy():
                 break
