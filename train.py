@@ -6,6 +6,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
+
 # データファイルの存在するフォルダ
 # ここでは python プログラムと同じフォルダに存在するものとする
 DATA_DIR = './'
