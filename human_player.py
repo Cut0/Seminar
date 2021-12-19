@@ -23,7 +23,7 @@ soc = None
 
 ### ここまで ###
 
-LOG_FILE = './log/human_player_log.csv'
+LOG_FILE = "./log/human_player_log.csv"
 
 
 # ゲームを開始する
@@ -48,7 +48,7 @@ def game_start():
     # ディーラーからカード情報を受信
     msg = soc.recv(1024)
     msg = msg.decode("utf-8")
-    pc1, pc2, dc = msg.split(',')
+    pc1, pc2, dc = msg.split(",")
     pc1 = int(pc1)
     pc2 = int(pc2)
     dc = int(dc)
@@ -82,14 +82,14 @@ def game_start():
             dealer_canvas_img[i], image=dealer_canvas[i].photo)
 
     # アクションボタンをアクティブにする
-    ht_button['state'] = tk.NORMAL
-    st_button['state'] = tk.NORMAL
-    dd_button['state'] = tk.NORMAL
-    sr_button['state'] = tk.NORMAL
+    ht_button["state"] = tk.NORMAL
+    st_button["state"] = tk.NORMAL
+    dd_button["state"] = tk.NORMAL
+    sr_button["state"] = tk.NORMAL
 
     # スタートボタンと終了を非アクティブにする
-    start_button['state'] = tk.DISABLED
-    quit_button['state'] = tk.DISABLED
+    start_button["state"] = tk.DISABLED
+    quit_button["state"] = tk.DISABLED
 
 
 # ディーラーに HIT を要求する
@@ -101,12 +101,12 @@ def hit():
     prev_score = player_hand.get_score()
 
     # ディーラーにメッセージを送信
-    soc.send(bytes("hit", 'utf-8'))
+    soc.send(bytes("hit", "utf-8"))
 
     # 配布されたカード，現在のスコア，バーストしたか否かをディーラーから通知してもらう
     msg = soc.recv(1024)
     msg = msg.decode("utf-8")
-    pc, score, status, rate = msg.split(',')
+    pc, score, status, rate = msg.split(",")
     pc = int(pc)
     score = int(score)
     rate = float(rate)
@@ -121,23 +121,23 @@ def hit():
     player_score_text.set("(score: {0})".format(player_hand.get_score()))
 
     # 行動前スコア，行動，行動後スコア，行動後ステータスをログに記録しておく
-    print('{0},HIT,{1},{2}'.format(prev_score, score, status), file=logf)
+    print("{0},HIT,{1},{2}".format(prev_score, score, status), file=logf)
 
     # バーストした場合はゲーム終了
-    if status == 'bust':
+    if status == "bust":
 
         # ディーラーとの通信をカット
         soc.close()
 
         # アクションボタンを非アクティブにする
-        ht_button['state'] = tk.DISABLED
-        st_button['state'] = tk.DISABLED
-        dd_button['state'] = tk.DISABLED
-        sr_button['state'] = tk.DISABLED
+        ht_button["state"] = tk.DISABLED
+        st_button["state"] = tk.DISABLED
+        dd_button["state"] = tk.DISABLED
+        sr_button["state"] = tk.DISABLED
 
         # スタートボタンと終了ボタンをアクティブにする
-        start_button['state'] = tk.NORMAL
-        quit_button['state'] = tk.NORMAL
+        start_button["state"] = tk.NORMAL
+        quit_button["state"] = tk.NORMAL
 
         # 金額表示を更新
         current_bet = 0
@@ -146,14 +146,14 @@ def hit():
 
         # 勝敗表示を更新
         result_text.set("Bust...")
-        result_label['fg'] = 'blue'
+        result_label["fg"] = "blue"
 
     else:
 
         # 1ゲームで引けるカードの最大枚数に達してしまった場合は，HITとDOUBLE DOWNは選択できないようにする
         if len(player_hand.cards) >= MAX_CARDS_PAR_GAME:
-            ht_button['state'] = tk.DISABLED
-            dd_button['state'] = tk.DISABLED
+            ht_button["state"] = tk.DISABLED
+            dd_button["state"] = tk.DISABLED
 
 
 # ディーラーに STAND を要求する
@@ -165,12 +165,12 @@ def stand():
     prev_score = player_hand.get_score()
 
     # ディーラーにメッセージを送信
-    soc.send(bytes("stand", 'utf-8'))
+    soc.send(bytes("stand", "utf-8"))
 
     # スコア，勝敗結果，配当倍率，ディーラーカードをディーラーから通知してもらう
     msg = soc.recv(1024)
     msg = msg.decode("utf-8")
-    msg = msg.split(',')
+    msg = msg.split(",")
     result = msg[1]
     score = int(msg[0])
     rate = float(msg[2])
@@ -187,20 +187,20 @@ def stand():
     dealer_score_text.set("(score: {0})".format(dealer_hand.get_score()))
 
     # 行動前スコア，行動，行動後スコア，行動後ステータスをログに記録しておく
-    print('{0},STAND,{1},{2}'.format(prev_score, score, result), file=logf)
+    print("{0},STAND,{1},{2}".format(prev_score, score, result), file=logf)
 
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
 
     # アクションボタンを非アクティブにする
-    ht_button['state'] = tk.DISABLED
-    st_button['state'] = tk.DISABLED
-    dd_button['state'] = tk.DISABLED
-    sr_button['state'] = tk.DISABLED
+    ht_button["state"] = tk.DISABLED
+    st_button["state"] = tk.DISABLED
+    dd_button["state"] = tk.DISABLED
+    sr_button["state"] = tk.DISABLED
 
     # スタートボタンと終了ボタンをアクティブにする
-    start_button['state'] = tk.NORMAL
-    quit_button['state'] = tk.NORMAL
+    start_button["state"] = tk.NORMAL
+    quit_button["state"] = tk.NORMAL
 
     # 所持金額を更新
     money += int(current_bet * rate)
@@ -210,15 +210,15 @@ def stand():
     money_text.set("money: {0:5}$  ( bet: {1:3}$ )".format(money, current_bet))
 
     # 勝敗表示を更新
-    if result == 'lose':
+    if result == "lose":
         result_text.set("Lose...")
-        result_label['fg'] = 'blue'
-    elif result == 'win':
+        result_label["fg"] = "blue"
+    elif result == "win":
         result_text.set("Win!!")
-        result_label['fg'] = 'red'
+        result_label["fg"] = "red"
     else:
         result_text.set("Draw")
-        result_label['fg'] = 'green'
+        result_label["fg"] = "green"
 
 
 # ディーラーに DOUBLE DOWN を要求する
@@ -236,12 +236,12 @@ def double_down():
         money, current_bet))  # 金額表示を更新
 
     # ディーラーにメッセージを送信
-    soc.send(bytes("double_down", 'utf-8'))
+    soc.send(bytes("double_down", "utf-8"))
 
     # 配布されたカード，スコア，勝敗結果，配当倍率，ディーラーカードディーラーから通知してもらう
     msg = soc.recv(1024)
     msg = msg.decode("utf-8")
-    msg = msg.split(',')
+    msg = msg.split(",")
     result = msg[2]
     pc = int(msg[0])
     score = int(msg[1])
@@ -257,24 +257,24 @@ def double_down():
     player_score_text.set("(score: {0})".format(player_hand.get_score()))
 
     # 行動前スコア，行動，行動後スコア，行動後ステータスをログに記録しておく
-    print('{0},DOUBLE DOWN,{1},{2}'.format(
+    print("{0},DOUBLE DOWN,{1},{2}".format(
         prev_score, score, result), file=logf)
 
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
 
     # アクションボタンを非アクティブにする
-    ht_button['state'] = tk.DISABLED
-    st_button['state'] = tk.DISABLED
-    dd_button['state'] = tk.DISABLED
-    sr_button['state'] = tk.DISABLED
+    ht_button["state"] = tk.DISABLED
+    st_button["state"] = tk.DISABLED
+    dd_button["state"] = tk.DISABLED
+    sr_button["state"] = tk.DISABLED
 
     # スタートボタンと終了ボタンをアクティブにする
-    start_button['state'] = tk.NORMAL
-    quit_button['state'] = tk.NORMAL
+    start_button["state"] = tk.NORMAL
+    quit_button["state"] = tk.NORMAL
 
     # バーストした場合
-    if result == 'bust':
+    if result == "bust":
 
         # 金額表示を更新
         current_bet = 0
@@ -283,7 +283,7 @@ def double_down():
 
         # 勝敗表示を更新
         result_text.set("Bust...")
-        result_label['fg'] = 'blue'
+        result_label["fg"] = "blue"
 
     # バーストしなかった場合
     else:
@@ -307,15 +307,15 @@ def double_down():
             "money: {0:5}$  ( bet: {1:3}$ )".format(money, current_bet))
 
         # 勝敗表示を更新
-        if result == 'lose':
+        if result == "lose":
             result_text.set("Lose...")
-            result_label['fg'] = 'blue'
-        elif result == 'win':
+            result_label["fg"] = "blue"
+        elif result == "win":
             result_text.set("Win!!")
-            result_label['fg'] = 'red'
+            result_label["fg"] = "red"
         else:
             result_text.set("Draw")
-            result_label['fg'] = 'green'
+            result_label["fg"] = "green"
 
 
 # ディーラーに SURRENDER を要求する
@@ -327,30 +327,30 @@ def surrender():
     prev_score = player_hand.get_score()
 
     # ディーラーにメッセージを送信
-    soc.send(bytes("surrender", 'utf-8'))
+    soc.send(bytes("surrender", "utf-8"))
 
     # スコア，サレンダー受付の返事，配当倍率をディーラーから通知してもらう
     msg = soc.recv(1024)
     msg = msg.decode("utf-8")
-    score, status, rate = msg.split(',')
+    score, status, rate = msg.split(",")
     score = int(score)
     rate = float(rate)
 
     # 行動前スコア，行動，行動後スコア，行動後ステータスをログに記録しておく
-    print('{0},SURRENDER,{1},{2}'.format(prev_score, score, status), file=logf)
+    print("{0},SURRENDER,{1},{2}".format(prev_score, score, status), file=logf)
 
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
 
     # アクションボタンを非アクティブにする
-    ht_button['state'] = tk.DISABLED
-    st_button['state'] = tk.DISABLED
-    dd_button['state'] = tk.DISABLED
-    sr_button['state'] = tk.DISABLED
+    ht_button["state"] = tk.DISABLED
+    st_button["state"] = tk.DISABLED
+    dd_button["state"] = tk.DISABLED
+    sr_button["state"] = tk.DISABLED
 
     # スタートボタンと終了ボタンをアクティブにする
-    start_button['state'] = tk.NORMAL
-    quit_button['state'] = tk.NORMAL
+    start_button["state"] = tk.NORMAL
+    quit_button["state"] = tk.NORMAL
 
     # 所持金額を更新
     money += int(current_bet * rate)
@@ -361,7 +361,7 @@ def surrender():
 
     # 勝敗表示を更新
     result_text.set("Surrendered")
-    result_label['fg'] = 'green'
+    result_label["fg"] = "green"
 
 
 # ゲームを終了する
@@ -372,22 +372,22 @@ def game_quit():
 
 # メインウィンドウの作成
 root = tk.Tk()
-root.title('Black Jack')
-root.geometry('{0}x440'.format(200+120*MAX_CARDS_PAR_GAME))
-root.protocol('WM_DELETE_WINDOW', (lambda: 'pass')())
+root.title("Black Jack")
+root.geometry("{0}x440".format(200+120*MAX_CARDS_PAR_GAME))
+root.protocol("WM_DELETE_WINDOW", (lambda: "pass")())
 
 # 残額表示オブジェクトの作成と設置
 money_text = tk.StringVar()
 money_text.set("money: {0:5}$".format(money))
 money_label = tk.Label(root, textvariable=money_text,
-                       font=('Arial', '12', 'bold'))
+                       font=("Arial", "12", "bold"))
 money_label.place(x=-20+120*MAX_CARDS_PAR_GAME, y=10)
 
 # 勝敗表示オブジェクトの作成と設置
 result_text = tk.StringVar()
 result_text.set("")
 result_label = tk.Label(root, textvariable=result_text,
-                        font=('Arial', '24', 'bold'))
+                        font=("Arial", "24", "bold"))
 result_label.place(x=330, y=210)
 
 # スコア表示用オブジェクトの作成と設置
@@ -396,16 +396,16 @@ dealer_score_text = tk.StringVar()
 player_score_text.set("(score:   )")
 dealer_score_text.set("(score:   )")
 player_score_label = tk.Label(
-    root, textvariable=player_score_text, font=('Arial', '14', 'bold'))
+    root, textvariable=player_score_text, font=("Arial", "14", "bold"))
 dealer_score_label = tk.Label(
-    root, textvariable=dealer_score_text, font=('Arial', '14', 'bold'))
+    root, textvariable=dealer_score_text, font=("Arial", "14", "bold"))
 player_score_label.place(x=160, y=240)
 dealer_score_label.place(x=160, y=10)
 
 # カード表示用キャンバスの作成と設置
 empty_img = tk.PhotoImage(file="./imgs/0.png")
-dealer_label = tk.Label(text="Dealer's cards", font=('Arial', '14', 'bold'))
-player_label = tk.Label(text="Player's cards", font=('Arial', '14', 'bold'))
+dealer_label = tk.Label(text="Dealerp's cards", font=("Arial", "14", "bold"))
+player_label = tk.Label(text="Player's cards", font=("Arial", "14", "bold"))
 dealer_label.place(x=10, y=10)
 player_label.place(x=10, y=240)
 dealer_canvas = [0] * MAX_CARDS_PAR_GAME
@@ -425,20 +425,20 @@ for i in range(0, MAX_CARDS_PAR_GAME):
     player_canvas[i].place(x=10+120*i, y=270)
 
 # ボタンの作成と設置
-action_label = tk.Label(text="Action:", font=('Arial', '14', 'bold'))
+action_label = tk.Label(text="Action:", font=("Arial", "14", "bold"))
 action_label.place(x=40+120*MAX_CARDS_PAR_GAME, y=160)
-start_button = tk.Button(width=14, text='Game Start', font=(
-    'Arial', '12', 'bold'), command=game_start)
-ht_button = tk.Button(width=15, text='HIT', font=(
-    'Arial', '12'), state=tk.DISABLED, command=hit)
-st_button = tk.Button(width=15, text='STAND', font=(
-    'Arial', '12'), state=tk.DISABLED, command=stand)
-dd_button = tk.Button(width=15, text='DOUBLE DOWN', font=(
-    'Arial', '12'), state=tk.DISABLED, command=double_down)
-sr_button = tk.Button(width=15, text='SURRENDER', font=(
-    'Arial', '12'), state=tk.DISABLED, command=surrender)
-quit_button = tk.Button(width=14, text='Quit', font=(
-    'Arial', '12', 'bold'), command=game_quit)
+start_button = tk.Button(width=14, text="Game Start", font=(
+    "Arial", "12", "bold"), command=game_start)
+ht_button = tk.Button(width=15, text="HIT", font=(
+    "Arial", "12"), state=tk.DISABLED, command=hit)
+st_button = tk.Button(width=15, text="STAND", font=(
+    "Arial", "12"), state=tk.DISABLED, command=stand)
+dd_button = tk.Button(width=15, text="DOUBLE DOWN", font=(
+    "Arial", "12"), state=tk.DISABLED, command=double_down)
+sr_button = tk.Button(width=15, text="SURRENDER", font=(
+    "Arial", "12"), state=tk.DISABLED, command=surrender)
+quit_button = tk.Button(width=14, text="Quit", font=(
+    "Arial", "12", "bold"), command=game_quit)
 start_button.place(x=40+120*MAX_CARDS_PAR_GAME, y=50)
 ht_button.place(x=40+120*MAX_CARDS_PAR_GAME, y=190)
 st_button.place(x=40+120*MAX_CARDS_PAR_GAME, y=225)
@@ -447,7 +447,7 @@ sr_button.place(x=40+120*MAX_CARDS_PAR_GAME, y=295)
 quit_button.place(x=40+120*MAX_CARDS_PAR_GAME, y=400)
 
 # ログファイルを開く
-logf = open(LOG_FILE, 'a')
+logf = open(LOG_FILE, "a")
 
 # メインループ開始
 root.mainloop()
