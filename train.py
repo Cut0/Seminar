@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
-os.environ['KMP_DUPLICATE_LIB_OK']='True'
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 # データファイルの存在するフォルダ
 # ここでは python プログラムと同じフォルダに存在するものとする
@@ -24,10 +24,12 @@ BATCH_SIZE = 64  # バッチサイズ
 N_EPOCHS = 100  # 何エポック分，学習処理を回すか
 
 # 学習結果を保存するファイルのファイル名
-MODEL_FILE = 'trained_model.pth'
+MODEL_FILE = 'models/trained_model.pth'
 
 # データ読み込み関数（数値データの場合）
 # 例えば mobile_phone_train.csv を用いる場合はこちらを使う
+
+
 def read_numerical_data(filename, encoding):
 
     # ファイル名 filename のファイルを CSV ファイルとしてオープン
@@ -57,7 +59,7 @@ def read_numerical_data(filename, encoding):
 
         # 出力側のデータ（正解ラベルのデータ）を作成する
         if row[1] == 'HIT':
-            lab = 0  
+            lab = 0
         elif row[1] == 'DOUBLE DOWN':
             lab = 1
         elif row[1] == 'SURRENDER':
@@ -80,17 +82,20 @@ def read_numerical_data(filename, encoding):
     return x_set, y_set
 
 # ニューラルネットワーク
+
+
 class myMLP(nn.Module):
     def __init__(self):
-        super(myMLP, self).__init__() 
+        super(myMLP, self).__init__()
 
         self.layers = nn.Sequential(
-            nn.Linear(5, 10),  
-            nn.ReLU(),  
-            nn.Linear(10, 10),  
-            nn.Sigmoid(),  
+            nn.Linear(5, 10),
+            nn.ReLU(),
+            nn.Linear(10, 10),
+            nn.Sigmoid(),
             nn.Linear(10, 4),
         )
+
     def forward(self, x):
         return self.layers(x)
 
@@ -103,7 +108,7 @@ if __name__ == '__main__':
     n_samples = len(x_train)  # 読み込んだデータの総数を変数 n_samples に記憶しておく
 
     # ニューラルネットワークの用意
-    net = myMLP() 
+    net = myMLP()
 
     # 損失関数の定義
     # ここでは Softmax + CrossEntropy損失 を用いる
@@ -119,11 +124,11 @@ if __name__ == '__main__':
 
         print('Epoch {0}:'.format(epoch + 1))
 
-        net.train()  
+        net.train()
         sum_loss = 0
         perm = np.random.permutation(n_samples)  # 学習データの使用順序をランダム化するために使用
         for i in range(0, n_samples, BATCH_SIZE):
-            net.zero_grad() 
+            net.zero_grad()
             # 入力ベクトル（PyTorch用の型に変換して使用）
             x = torch.tensor(x_train[perm[i: i + BATCH_SIZE]], device=device)
             # 正解ラベル（PyTorch用の型に変換して使用）
