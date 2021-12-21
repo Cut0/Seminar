@@ -2,7 +2,7 @@ import sys
 import socket
 import numpy as np
 from classes import Hand
-from config import PORT, BET, INITIAL_MONEY
+from config import PORT, BET, INITIAL_MONEY, N_GAMES
 from predictor import output
 
 ### グローバル変数 ###
@@ -26,7 +26,8 @@ soc = None
 player_score = -1
 dealer_card_number = -1
 n_used_cards = 0
-
+card_count = 0
+game_number = 0
 ### ここまで ###
 
 LOG_FILE = "./log/ai_model_player_log.csv"
@@ -315,6 +316,8 @@ def model_strategy():
     global n_used_cards
     global player_score
     global dealer_card_number
+    global card_count 
+    global game_number
 
     # 「現在の状態」に保存
     player_score = player_hand.get_score()
@@ -331,8 +334,25 @@ def model_strategy():
     print("プレイヤーのカード枚数", len(player_hand.cards))
     print("現在のプレイヤーのスコア", ps)
 
-    data = np.asarray([ps, n_used_cards, dealer_card_number,
-                       player_cards_number[0], player_cards_number[1]], dtype=np.float32)
+    # カードカウンティング
+    def calculate_card_count(card_number):
+        global card_count 
+        if card_number >= 10 or card_number == 1:
+            card_count -= 1
+        elif card_number <= 6:
+            card_count += 1
+
+    if game_number % N_GAMES == 1: #シャッフルされるごとにcard_countを初期化
+        card_count = 0
+
+    for card in player_hand.cards:
+        calculate_card_count(card % 13 + 1)
+    for card in dealer_hand.cards:
+        calculate_card_count(card % 13 + 1)   
+
+    # n_used_cardsは使わない
+    data = np.asarray([ps, dealer_card_number,
+                       player_cards_number[0], player_cards_number[1], card_count], dtype=np.float32)
 
     ans = output(data)
 
@@ -355,6 +375,7 @@ def model_strategy():
         print("今ゲームで使用したカードの枚数", n)
         print("これまでの全ゲームで使用したカードの枚数", n_used_cards)
 
+
     return return_value
 
 
@@ -368,6 +389,7 @@ if __name__ == "__main__":
 
     for n in range(n_games):
         game_start(n+1)
+        game_number += 1
         while True:
             if model_strategy():
                 break
