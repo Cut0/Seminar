@@ -184,8 +184,8 @@ def hit():
     global player_score
     global dealer_card_number
 
-    print("{0},HIT,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
-                                                   status, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
+    print("{0},HIT,{1},{2},{3},{4},{5},{6},{7}".format(prev_score, score,
+                                                   status, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1, card_count), file=logf)
 
     # バーストした場合はゲーム終了
     if status == "bust":
@@ -237,8 +237,8 @@ def stand():
     global player_score
     global dealer_card_number
 
-    print("{0},STAND,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
-                                                     result, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
+    print("{0},STAND,{1},{2},{3},{4},{5},{6},{7}".format(prev_score, score,
+                                                     result, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1, card_count), file=logf)
 
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
@@ -292,8 +292,8 @@ def double_down():
     global player_score
     global dealer_card_number
 
-    print("{0},DOUBLE DOWN,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
-                                                           result, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
+    print("{0},DOUBLE DOWN,{1},{2},{3},{4},{5},{6},{7}".format(prev_score, score,
+                                                           result, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1, card_count), file=logf)
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
 
@@ -346,8 +346,8 @@ def surrender():
     global n_used_cards
     global player_score
     global dealer_card_number
-    print("{0},SURRENDER,{1},{2},{3},{4},{5},{6}".format(prev_score, score,
-                                                         status, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1), file=logf)
+    print("{0},SURRENDER,{1},{2},{3},{4},{5},{6},{7}".format(prev_score, score,
+                                                         status, n_used_cards, dealer_card_number, (player_hand.cards[0] % 13) + 1, (player_hand.cards[1] % 13) + 1, card_count), file=logf)
     # ゲーム終了，ディーラーとの通信をカット
     soc.close()
 
@@ -447,8 +447,7 @@ def strategy():
         for card in player_hand.cards:
             calculate_card_count(card % 13 + 1)
         for card in dealer_hand.cards:
-            calculate_card_count(card % 13 + 1)
-        
+            calculate_card_count(card % 13 + 1)   
     
     return return_value
 
