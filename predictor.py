@@ -1,28 +1,10 @@
-import os
-import csv
 import numpy as np
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
-
-
-# train.py で定義した関数　read_data およびニューラルネットワーク myMLP をインポートする
-# train.py で「myMLP」の部分の名称を変えている場合は，下の行の「myMLP」も同様に変更する必要がある
 from train import myMLP
-
-# tran.py で指定した定数値（フォルダ名やファイル名）も一応インポートし，
-# 本プログラムでも使えるようにしておく
-# ここは基本的に変更しなくてOK
 from train import MODEL_FILE
 
-
-# テストデータセット（CSVファイル）のファイル名
-# ここでは例として mobile_phone_test.csv を用い，
-# 携帯端末のスペックから価格帯（0～3の4段階）を分類する分類器をテストする場合を例にとる
-# mushroom_test.csv を用い，食べられるキノコか毒キノコかを分類する場合も試してみましょう．
-
 actions = ["H", "D", "SR", "S"]
-# ニューラルネットワーク net にデータ vec を入力して分類結果を得る関数
 
 
 def predict(net, vec):

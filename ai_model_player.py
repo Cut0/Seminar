@@ -3,6 +3,7 @@ import socket
 import numpy as np
 from classes import Hand
 from config import PORT, BET, INITIAL_MONEY
+from predictor import output
 
 ### グローバル変数 ###
 
@@ -28,60 +29,7 @@ n_used_cards = 0
 
 ### ここまで ###
 
-LOG_FILE = "./log/ai_player_log.csv"
-
-normal_map = [
-    # 自分が5以下のとき
-    ["SR", "H", "H", "H", "H", "H", "H", "H", "H", "H"],
-    # 自分が6のとき
-    ["SR", "H", "H", "H", "H", "H", "H", "H", "H", "H"],
-    # 自分が7のとき
-    ["SR", "H", "H", "H", "H", "H", "H", "H", "H", "H"],
-    # 自分が8のとき
-    ["H", "H", "H", "H", "H", "H", "H", "H", "H", "H"],
-    # 自分が9のとき
-    ["H", "H", "D", "D", "D", "D", "H", "H", "H", "H"],
-    # 自分が10のとき
-    ["H", "D", "D", "D", "D", "D", "D", "D", "D", "H"],
-    # 自分が11のとき
-    ["H", "D", "D", "D", "D", "D", "D", "D", "D", "D"],
-    # 自分が12のとき
-    ["SR", "H", "H", "H", "H", "H", "H", "H", "H", "H"],
-    # 自分が13のとき
-    ["SR", "H", "H", "H", "H", "H", "H", "H", "H", "H"],
-    # 自分が14のとき
-    ["SR", "H", "H", "H", "H", "H", "H", "H", "H", "SR"],
-    # 自分が15のとき
-    ["SR", "H", "H", "H", "H", "H", "H", "H", "H", "SR"],
-    # 自分が16のとき
-    ["SR", "H", "H", "H", "H", "H", "H", "H", "H", "SR"],
-    # 自分が17のとき
-    ["SR", "H", "H", "H", "H", "H", "H", "H", "S", "S"],
-    # 自分が18のとき
-    ["S", "S", "S", "S", "S", "S", "S", "S", "H", "H"],
-    # 自分が19以上のとき
-    ["S", "S", "S", "S", "S", "S", "S", "S", "S", "S"]
-]
-
-# 自分のカード2枚のうち、片方にAがある場合
-ace_map = [
-    # Aではない方のカードが2のとき
-    ["H", "H", "H", "H", "D", "D", "H", "H", "H", "H"],
-    # Aではない方のカードが3のとき
-    ["H", "H", "H", "H", "D", "D", "H", "H", "H", "H"],
-    # Aではない方のカードが4のとき
-    ["H", "H", "H", "D", "D", "D", "H", "H", "H", "H"],
-    # Aではない方のカードが5のとき
-    ["H", "H", "H", "D", "D", "D", "H", "H", "H", "H"],
-    # Aではない方のカードが6のとき
-    ["H", "H", "D", "D", "D", "D", "H", "H", "H", "H"],
-    # Aではない方のカードが7のとき
-    ["S", "H", "D", "D", "D", "D", "S", "S", "H", "H"],
-    # Aではない方のカードが8のとき
-    ["S", "S", "S", "S", "S", "S", "S", "S", "S", "S"]
-]
-
-# カードのスート・数字を取得
+LOG_FILE = "./log/ai_model_player_log.csv"
 
 
 def get_card_info(card):
@@ -360,7 +308,7 @@ def surrender():
     return True
 
 
-def strategy():
+def model_strategy():
     # グローバル変数
     # 自分で追加定義したグローバル変数がある場合は，その変数名を下の行に追加すると関数内で使えるようになる
     global player_hand, dealer_hand
@@ -383,32 +331,10 @@ def strategy():
     print("プレイヤーのカード枚数", len(player_hand.cards))
     print("現在のプレイヤーのスコア", ps)
 
-    ans = None  # 行う行動を保存(string型)
-    # 自分のカード2枚のうち、片方にAがある場合
-    if have_ace:
-        for card in player_cards_number:
-            if card >= 2 and card <= 8:
-                if dealer_card_number >= 10:
-                    ans = ace_map[card - 2][9]
-                else:
-                    ans = ace_map[card - 2][dealer_card_number - 1]
-    # 自分のカード2枚のうち、Aがない場合
-    if ans == None:
-        if ps <= 5:
-            if dealer_card_number >= 10:
-                ans = normal_map[0][9]
-            else:
-                ans = normal_map[0][dealer_card_number - 1]
-        elif ps >= 19:
-            if dealer_card_number >= 10:
-                ans = normal_map[14][9]
-            else:
-                ans = normal_map[14][dealer_card_number - 1]
-        else:
-            if dealer_card_number >= 10:
-                ans = normal_map[ps - 5][9]
-            else:
-                ans = normal_map[ps - 5][dealer_card_number - 1]
+    data = np.asarray([ps, n_used_cards, dealer_card_number,
+                       player_cards_number[0], player_cards_number[1]], dtype=np.float32)
+
+    ans = output(data)
 
     return_value = None  # 行う行動を保存
     if ans == "H":
@@ -443,7 +369,7 @@ if __name__ == "__main__":
     for n in range(n_games):
         game_start(n+1)
         while True:
-            if strategy():
+            if model_strategy():
                 break
         print("")
 
