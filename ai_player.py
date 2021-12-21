@@ -2,7 +2,7 @@ import sys
 import socket
 import numpy as np
 from classes import Hand
-from config import PORT, BET, INITIAL_MONEY
+from config import PORT, BET, INITIAL_MONEY, N_GAMES
 
 ### グローバル変数 ###
 
@@ -25,7 +25,8 @@ soc = None
 player_score = -1
 dealer_card_number = -1
 n_used_cards = 0
-
+card_count = 0
+game_number = 0
 ### ここまで ###
 
 LOG_FILE = "./log/ai_player_log.csv"
@@ -367,7 +368,9 @@ def strategy():
     global n_used_cards
     global player_score
     global dealer_card_number
-
+    global card_count 
+    global game_number
+  
     # 「現在の状態」に保存
     player_score = player_hand.get_score()
     dealer_card_number = dealer_hand.cards[0] % 13 + 1
@@ -376,6 +379,7 @@ def strategy():
     player_cards_number = []
     for card in player_hand.cards:
         player_cards_number.append(card % 13 + 1)
+
 
     have_ace = player_hand.have_ace
     ps = player_hand.get_score()
@@ -428,7 +432,24 @@ def strategy():
         n_used_cards += n
         print("今ゲームで使用したカードの枚数", n)
         print("これまでの全ゲームで使用したカードの枚数", n_used_cards)
+        
+        # カードカウンティング
+        def calculate_card_count(card_number):
+            global card_count 
+            if card_number >= 10 or card_number == 1:
+                card_count -= 1
+            elif card_number <= 6:
+                card_count += 1
 
+        if game_number % N_GAMES == 1: #シャッフルされるごとにcard_countを初期化
+            card_count = 0
+
+        for card in player_hand.cards:
+            calculate_card_count(card % 13 + 1)
+        for card in dealer_hand.cards:
+            calculate_card_count(card % 13 + 1)
+        
+    
     return return_value
 
 
@@ -442,6 +463,7 @@ if __name__ == "__main__":
 
     for n in range(n_games):
         game_start(n+1)
+        game_number += 1
         while True:
             if strategy():
                 break
